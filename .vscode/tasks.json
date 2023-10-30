@@ -1,0 +1,13 @@
+{
+  "tasks": [
+    {
+      "label": "make",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "command": "make"
+    }
+  ],
+  "version": "2.0.0"
+}
