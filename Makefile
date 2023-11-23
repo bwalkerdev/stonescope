@@ -1,8 +1,8 @@
 # A line starting with a has is a comment, we'll build up
 # the below example
 
-TARGET = build/stonescope 
-SRC_FILES = src/main.cpp 
+TARGET = stonescope 
+SRC_FILES = ./src/main.cpp ./include/TouchstoneFile.cpp ./include/TouchstoneFile.h ./include/Options.h ./include/DataPoint.h
 
 # NO EDITS NEEDED BELOW THIS LINE
 
@@ -42,4 +42,5 @@ depend:
 .PHONY: all clean depend
 
 # DEPENDENCIES
-main.o: main.cpp 
+main.o: main.cpp ./include/TouchstoneFile.h
+TouchstoneFile.o: ./include/TouchstoneFile.h ./include/DataPoint.h ./include/Options.h
