@@ -13,8 +13,11 @@ TouchstoneFile::TouchstoneFile() { _setDefaults(); }
 TouchstoneFile::TouchstoneFile(const std::string FILEPATH) { open(FILEPATH); }
 
 TouchstoneFile::~TouchstoneFile() {
-  std::cout << "Called ~TouchstoneFile" << std::endl; // FIXME: Acutally clean
-                                                      // up resources
+  // TODO: Clean up other pointers from additional datasets.
+  for (size_t i = 0; i < _originalData.size(); ++i) {
+    delete _originalData.at(i);
+  }
+  std::cout << "Called ~TouchstoneFile" << std::endl;
 }
 
 void TouchstoneFile::_setDefaults() {
@@ -105,22 +108,22 @@ void TouchstoneFile::_parseDataLines(std::ifstream &file) {
     if (!line.empty() && line.at(0) != '!') {
       std::stringstream lineStream(line);
       std::string token;
-      DataPoint *point = new DataPoint;
+      DataPoint *pPoint = new DataPoint;
 
-      lineStream >> token;                 // Get frequency value
-      point->frequency = std::stod(token); // WARNING: Could throw
+      lineStream >> token;                  // Get frequency value
+      pPoint->frequency = std::stod(token); // WARNING: Could throw
 
       bool lhs = true;
 
       while (lineStream >> token) {
         if (lhs) {
-          point->lhs.push_back(std::stod(token)); // WARNING: Could throw
+          pPoint->lhs.push_back(std::stod(token)); // WARNING: Could throw
         } else {
-          point->rhs.push_back(std::stod(token));
+          pPoint->rhs.push_back(std::stod(token));
         }
         lhs = !lhs;
       }
-      _originalData.push_back(point);
+      _originalData.push_back(pPoint);
     }
   }
 }

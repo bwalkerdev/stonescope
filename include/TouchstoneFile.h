@@ -45,7 +45,6 @@ private:
   void _setDefaults();
   void _parseOptionLine(std::ifstream &file);
   void _parseDataLines(std::ifstream &file);
-  PortNumber _parseNumPorts(const int NUM_PORTS);
   FrequencyType _parseFreqT(const std::string &TOKEN);
   ParameterType _parseParamT(const std::string &TOKEN);
   ParameterFormat _parseParamFmt(const std::string &TOKEN);

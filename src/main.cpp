@@ -5,4 +5,5 @@ int main() {
   TouchstoneFile file;
   file.open("./data/example.S2P");
   std::cout << "Finished" << std::endl;
+  return 0;
 }
