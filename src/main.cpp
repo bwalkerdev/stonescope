@@ -32,7 +32,7 @@ int main() {
 
   sf::RenderWindow window(
       sf::VideoMode(plot.getWidth() + margin, plot.getHeight() + margin),
-      "SFML TEST");
+      "stonescope");
 
   // Main Loop
   sf::Event event;
