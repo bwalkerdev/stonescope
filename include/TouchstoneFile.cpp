@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -27,6 +28,12 @@ void TouchstoneFile::_setDefaults() {
   _paramT = ParameterType::S;
   _paramFmt = ParameterFormat::MA;
   _refRes = 50;
+  _maxFreq = std::numeric_limits<double>::lowest();
+  _minFreq = std::numeric_limits<double>::max();
+  _maxLHS = std::numeric_limits<double>::lowest();
+  _minLHS = std::numeric_limits<double>::max();
+  _maxRHS = std::numeric_limits<double>::lowest();
+  _minRHS = std::numeric_limits<double>::max();
 }
 
 void TouchstoneFile::open(const std::string FILEPATH) {
@@ -110,16 +117,36 @@ void TouchstoneFile::_parseDataLines(std::ifstream &file) {
       std::string token;
       DataPoint *pPoint = new DataPoint;
 
-      lineStream >> token;                  // Get frequency value
-      pPoint->frequency = std::stod(token); // WARNING: Could throw
+      lineStream >> token;              // Get frequency value
+      double dToken = std::stod(token); // WARNING: Could throw
+      pPoint->frequency = dToken;
+      // Update frequency min and max
+      if (dToken > _maxFreq) {
+        _maxFreq = dToken;
+      } else if (dToken < _minFreq) {
+        _minFreq = dToken;
+      }
 
       bool lhs = true;
 
       while (lineStream >> token) {
+        dToken = std::stod(token);
         if (lhs) {
-          pPoint->lhs.push_back(std::stod(token)); // WARNING: Could throw
+          pPoint->lhs.push_back(dToken); // WARNING: Could throw
+          // update max/min
+          if (dToken > _maxLHS) {
+            _maxLHS = dToken;
+          } else if (dToken < _minLHS) {
+            _minLHS = dToken;
+          }
         } else {
-          pPoint->rhs.push_back(std::stod(token));
+          pPoint->rhs.push_back(dToken);
+          // update max/min
+          if (dToken > _maxRHS) {
+            _maxRHS = dToken;
+          } else if (dToken < _minRHS) {
+            _minRHS = dToken;
+          }
         }
         lhs = !lhs;
       }
@@ -172,3 +199,16 @@ ParameterFormat TouchstoneFile::_parseParamFmt(const std::string &TOKEN) {
   std::cerr << "Unknown parameter format: " << TOKEN << std::endl;
   throw std::invalid_argument("Invalid parameter format token");
 }
+
+// GETTERS
+double TouchstoneFile::getMaxFreq() const { return _maxFreq; }
+
+double TouchstoneFile::getMinFreq() const { return _minFreq; }
+
+double TouchstoneFile::getMaxLHS() const { return _maxLHS; }
+
+double TouchstoneFile::getMinLHS() const { return _minLHS; }
+
+double TouchstoneFile::getMaxRHS() const { return _maxRHS; }
+
+double TouchstoneFile::getMinRHS() const { return _minRHS; }

@@ -1,8 +1,5 @@
-# A line starting with a has is a comment, we'll build up
-# the below example
-
 TARGET = stonescope 
-SRC_FILES = ./src/main.cpp ./include/TouchstoneFile.cpp ./include/TouchstoneFile.h ./include/Options.h ./include/DataPoint.h
+SRC_FILES = ./src/main.cpp ./include/TouchstoneFile.cpp ./include/TouchstoneFile.h ./include/Options.h ./include/DataPoint.h ./include/Plot.h ./include/Plot.cpp
 
 # NO EDITS NEEDED BELOW THIS LINE
 
@@ -13,26 +10,59 @@ CXXVERSION = -std=c++17
 
 OBJECTS = $(SRC_FILES:.cpp=.o)
 
-ifeq ($(shell echo "Windows"), "Windows")
+ifeq ($(OS),Windows_NT)
 	TARGET := $(TARGET).exe
 	DEL = del
-	Q=
+	Q =
+
+	INC_PATH = Z:/CSCI200/include/
+	LIB_PATH = Z:/CSCI200/lib/
+
+	ARCH = 
+	RPATH =
 else
 	DEL = rm -f
-	Q="
+	Q = "
+
+	INC_PATH = /usr/local/include/
+	LIB_PATH = /usr/local/lib/
+
+	UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S),Linux)
+		CXXFLAGS += -D LINUX
+		RPATH =
+	endif
+	ifeq ($(UNAME_S),Darwin)
+		TARGET_MAKEFILE = Makefile.osx
+		CXXFLAGS += -D OSX
+		RPATH = -Wl,-rpath,/Library/Frameworks
+	endif
+
+	UNAME_P := $(shell uname -p)
+	ifeq ($(UNAME_P),x86_64)
+		ARCH = 
+	endif
+	ifneq ($(filter %86,$(UNAME_P)),)
+		ARCH = 
+	endif
+	ifneq ($(filter arm%,$(UNAME_P)),)
+		ARCH = 
+	endif
 endif
+
+LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
 
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CXX) -o $@ $^
+	$(CXX) $(ARCH) -o $@ $^ $(RPATH) -L$(LIB_PATH) $(LIBS)
 
 .cpp.o:
-	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_DEBUG) $(ARCH) $(CXXVERSION) -o $@ -c $< -I$(INC_PATH) # TODO: Remove debug flags
 
 clean:
-	$(DEL) $(TARGET) $(OBJECTS) Makefile.bak
-
+	$(DEL) $(TARGET) $(OBJECTS)
+	
 depend:
 	@sed -i.bak '/^# DEPENDENCIES/,$$d' Makefile
 	@$(DEL) sed*
@@ -42,5 +72,6 @@ depend:
 .PHONY: all clean depend
 
 # DEPENDENCIES
-main.o: main.cpp ./include/TouchstoneFile.h
+main.o: main.cpp ./include/TouchstoneFile.h ./include/Plot.h
 TouchstoneFile.o: ./include/TouchstoneFile.h ./include/DataPoint.h ./include/Options.h
+Plot.o: ./include/Plot.h ./include/TouchstoneFile.h

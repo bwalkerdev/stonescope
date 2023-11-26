@@ -7,7 +7,6 @@
 #ifndef TOUCHSTONE_FILE_H
 #define TOUCHSTONE_FILE_H
 
-#include <vector>
 /**
  * @class TouchstoneFile
  * @brief Class used to read in and parse a Touchstone File
@@ -38,6 +37,13 @@ public:
    */
   void open(const std::string FILEPATH);
 
+  double getMaxFreq() const;
+  double getMinFreq() const;
+  double getMaxLHS() const;
+  double getMinLHS() const;
+  double getMaxRHS() const;
+  double getMinRHS() const;
+
 private:
   /**
    * @brief Set defaults based upon Touchstone File Spec
@@ -54,6 +60,12 @@ private:
   ParameterType _paramT;
   ParameterFormat _paramFmt;
   double _refRes;
+  double _maxFreq;
+  double _minFreq;
+  double _maxLHS;
+  double _minLHS;
+  double _maxRHS;
+  double _minRHS;
 };
 
 #endif // !TOUCHSTONE_FILE_H
