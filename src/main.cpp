@@ -9,6 +9,8 @@
 #include <iostream>
 
 int main() {
+  int windowWidth = 800;
+  int windowHeight = 600;
   // Setup Resources
   sf::Font jetBrainsMono;
   if (!jetBrainsMono.loadFromFile(
@@ -17,7 +19,7 @@ int main() {
   }
   sf::Text text;
   text.setFont(jetBrainsMono);
-  text.setString(L"Hello World  "); // NOTE: L allows non-ascii characters
+  text.setString(L"   STONKS"); // NOTE: L allows non-ascii characters
   text.setCharacterSize(24);
   text.setFillColor(sf::Color::White);
 
@@ -28,11 +30,10 @@ int main() {
 
   // Setup Plot
   int margin = 50;
-  Plot plot(file);
+  Plot plot(file, windowWidth, windowHeight, margin);
 
-  sf::RenderWindow window(
-      sf::VideoMode(plot.getWidth() + margin, plot.getHeight() + margin),
-      "stonescope");
+  sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight),
+                          "stonescope");
 
   // Main Loop
   sf::Event event;
