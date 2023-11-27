@@ -9,8 +9,8 @@
 #include <iostream>
 
 int main() {
-  int windowWidth = 800;
-  int windowHeight = 600;
+  int windowWidth = 1080;
+  int windowHeight = 720;
   // Setup Resources
   sf::Font jetBrainsMono;
   if (!jetBrainsMono.loadFromFile(

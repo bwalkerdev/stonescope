@@ -123,7 +123,8 @@ void TouchstoneFile::_parseDataLines(std::ifstream &file) {
       // Update frequency min and max
       if (dToken > _maxFreq) {
         _maxFreq = dToken;
-      } else if (dToken < _minFreq) {
+      }
+      if (dToken < _minFreq) {
         _minFreq = dToken;
       }
 
@@ -136,7 +137,8 @@ void TouchstoneFile::_parseDataLines(std::ifstream &file) {
           // update max/min
           if (dToken > _maxLHS) {
             _maxLHS = dToken;
-          } else if (dToken < _minLHS) {
+          }
+          if (dToken < _minLHS) {
             _minLHS = dToken;
           }
         } else {
@@ -144,7 +146,8 @@ void TouchstoneFile::_parseDataLines(std::ifstream &file) {
           // update max/min
           if (dToken > _maxRHS) {
             _maxRHS = dToken;
-          } else if (dToken < _minRHS) {
+          }
+          if (dToken < _minRHS) {
             _minRHS = dToken;
           }
         }

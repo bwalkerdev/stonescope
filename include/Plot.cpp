@@ -6,7 +6,6 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
-#include <exception>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -20,7 +19,8 @@ Plot::Plot(TouchstoneFile &file, const int windowWidth, const int windowHeight,
   _bgColor = sf::Color::White;
   _padding = 50;
   _lineThickness = 3;
-  _stepSize = 1;
+  _yStepSize = 1;
+  _xStepSize = 1; // TODO: Make this selectable
   _origin = sf::Vector2f(_margin + _padding, _margin + _height - _padding);
 }
 
@@ -54,7 +54,7 @@ void Plot::drawAxes(sf::RenderTarget &target) {
   text.setCharacterSize(8);
   text.setFillColor(sf::Color::Black);
 
-  // TICKS
+  // AXES
   sf::RectangleShape xAxis(sf::Vector2f(_width - _padding * 2, _lineThickness));
   sf::RectangleShape yAxis(
       sf::Vector2f(_lineThickness, _height - _padding * 2));
@@ -68,14 +68,20 @@ void Plot::drawAxes(sf::RenderTarget &target) {
   int yAxisMax = std::ceil(_file.getMaxLHS()); // TODO: Make selectable
   int yAxisMin = static_cast<int>(_file.getMinLHS());
   int deltaY = yAxisMax - yAxisMin;
-  int yNumSteps = deltaY / _stepSize;
-  double pixelStepSize = yAxis.getSize().y / static_cast<double>(yNumSteps);
+  int yNumSteps = deltaY / _yStepSize;
+  double yPixelStepSize = yAxis.getSize().y / static_cast<double>(yNumSteps);
+  int xAxisMax = std::ceil(_file.getMaxFreq());
+  int xAxisMin = std::floor(_file.getMinFreq());
+  int deltaX = xAxisMax - xAxisMin;
+  int xNumSteps = deltaX / _xStepSize;
+  double xPixelStepSize = xAxis.getSize().x / static_cast<double>(xNumSteps);
 
-  // LOOP VARIABLES
-  sf::Vector2f currentPosition = _origin - sf::Vector2f(6, pixelStepSize);
-  int currentYVal = yAxisMin + _stepSize;
+  // Draw Y Decorations
+  sf::Vector2f currentPosition =
+      _origin - sf::Vector2f(_lineThickness * 2, yPixelStepSize);
+  int currentYVal = yAxisMin + _yStepSize;
   for (int i = 0; i < yNumSteps; i++) {
-    sf::RectangleShape tick(sf::Vector2f(9, _lineThickness));
+    sf::RectangleShape tick(sf::Vector2f(_lineThickness * 3, _lineThickness));
     tick.setFillColor(sf::Color::Red);
     tick.setPosition(currentPosition);
     target.draw(tick);
@@ -84,11 +90,36 @@ void Plot::drawAxes(sf::RenderTarget &target) {
     sf::FloatRect textRect = text.getLocalBounds();
     text.setOrigin(textRect.getSize());
     // Set the position
-    text.setPosition(currentPosition -
-                     sf::Vector2f(9, -(textRect.getSize().y / 2.0)));
+    text.setPosition(
+        currentPosition -
+        sf::Vector2f(_lineThickness * 3, -(textRect.getSize().y / 2.0)));
     target.draw(text);
     // Update loop variables
-    currentPosition -= sf::Vector2f(0, pixelStepSize);
-    currentYVal += _stepSize;
+    currentPosition -= sf::Vector2f(0, yPixelStepSize);
+    currentYVal += _yStepSize;
+  }
+
+  // Draw X Decorations
+  currentPosition = _origin + sf::Vector2f(xPixelStepSize, -_lineThickness);
+  int currentXVal = xAxisMin + _xStepSize;
+  for (int i = 0; i < xNumSteps; ++i) {
+    sf::RectangleShape tick(sf::Vector2f(_lineThickness, _lineThickness * 3));
+    tick.setFillColor(sf::Color::Red);
+    tick.setPosition(currentPosition);
+    target.draw(tick);
+
+    text.setString(std::to_string(currentXVal));
+    text.setOrigin(0, 0);
+    // Calculate the width of the text
+    sf::FloatRect textRect = text.getLocalBounds();
+    // text.setOrigin(textRect.getSize());
+    // Set the position
+    text.setPosition(currentPosition +
+                     sf::Vector2f(-textRect.width / 2.0, _lineThickness * 3));
+    target.draw(text);
+
+    // Update loop variables
+    currentPosition += sf::Vector2f(xPixelStepSize, 0);
+    currentXVal += _xStepSize;
   }
 }

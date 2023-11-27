@@ -20,7 +20,8 @@ private:
   int _padding;
   int _margin;
   int _lineThickness;
-  int _stepSize;
+  int _yStepSize;
+  int _xStepSize;
   sf::Vector2f _origin;
   sf::Color _bgColor;
   sf::Vector2f normalize();
@@ -29,6 +30,7 @@ private:
   TouchstoneFile &_file;
   void drawBackground(sf::RenderTarget &target);
   void drawAxes(sf::RenderTarget &target);
+  void drawPlot(sf::RenderTarget &target);
 };
 
 #endif // !PLOT_H
