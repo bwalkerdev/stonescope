@@ -3,7 +3,6 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/System/Vector2.hpp>
 
 TSPlot::TSPlot(TouchstoneFile &file, sf::Font &font)
     : _file(file), _font(font) {

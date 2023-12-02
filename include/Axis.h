@@ -7,9 +7,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/Transformable.hpp>
-#include <SFML/System/Vector2.hpp>
 #include <string>
-#include <tuple>
 
 enum class AxisType { X, Y };
 

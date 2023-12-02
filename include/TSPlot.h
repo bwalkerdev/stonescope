@@ -7,10 +7,7 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Transformable.hpp>
-#include <SFML/System/Vector2.hpp>
 #include <string>
-#include <tuple>
-#include <vector>
 class TSPlot : public sf::Drawable, public sf::Transformable {
 public:
   TSPlot() = delete;
