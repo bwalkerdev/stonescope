@@ -1,4 +1,3 @@
-#include "../include/Plot.h"
 #include "../include/TSPlot.h"
 #include "../include/TouchstoneFile.h"
 #include <SFML/Graphics.hpp>

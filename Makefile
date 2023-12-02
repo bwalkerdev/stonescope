@@ -1,5 +1,5 @@
 TARGET = stonescope 
-SRC_FILES = ./src/main.cpp ./include/TouchstoneFile.cpp ./include/TouchstoneFile.h ./include/Options.h ./include/DataPoint.h ./include/Plot.h ./include/Plot.cpp ./include/TSPlot.cpp ./include/TSPlot.h ./include/Axis.h ./include/Axis.cpp
+SRC_FILES = ./src/main.cpp ./include/TouchstoneFile.cpp ./include/TouchstoneFile.h ./include/Options.h ./include/DataPoint.h ./include/TSPlot.cpp ./include/TSPlot.h ./include/Axis.h ./include/Axis.cpp
 
 # NO EDITS NEEDED BELOW THIS LINE
 
@@ -72,8 +72,7 @@ depend:
 .PHONY: all clean depend
 
 # DEPENDENCIES
-main.o: main.cpp ./include/TouchstoneFile.h # ./include/Plot.h
+main.o: main.cpp ./include/TouchstoneFile.h 
 TouchstoneFile.o: ./include/TouchstoneFile.h ./include/DataPoint.h ./include/Options.h
-Plot.o: ./include/Plot.h ./include/TouchstoneFile.h
 TSPlot.o: ./include/TSPlot.h ./include/Axis.h
 Axis.o: ./include/Axis.h

@@ -18,12 +18,6 @@ void TSPlot::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   sf::RectangleShape background(_size);
   background.setFillColor(_bgColor);
 
-  sf::RectangleShape origin; // FIXME: Remove this later
-  origin.setSize(sf::Vector2f(5, 5));
-  origin.setOrigin(sf::Vector2f(origin.getSize().x, 0));
-  origin.setFillColor(sf::Color::Red);
-  origin.setPosition(_origin);
-
   Axis yAxis(_font);
   yAxis.setLength(_plotSize.y);
   yAxis.setAxisColor(_axisColor);
@@ -56,8 +50,6 @@ void TSPlot::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
   states.transform *= getTransform();
   target.draw(background, states);
-  target.draw(origin, states);
-  // target.draw(axis, states);
   target.draw(yAxis, states);
   target.draw(xAxis, states);
 }
