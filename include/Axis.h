@@ -25,12 +25,7 @@ public:
   void setTickColor(sf::Color color);
   void setStepSize(double stepSize);
   void setFont(const sf::Font &font);
-  void setYAxisLabel(std::string label);
-  struct AxisLabelContainer {
-    std::string x;
-    std::string y;
-  };
-  void setXAxisLabel(std::string label);
+  void setLabel(const std::string label);
   // TODO: Add function for getting size of axis
 
 private:
@@ -44,10 +39,11 @@ private:
   sf::Color _axisColor;
   sf::Color _tickColor;
   sf::Font &_font;
-  AxisLabelContainer _axisLabel;
+  std::string _axisLabel;
   void setupAxis(sf::RectangleShape &axis) const;
   void setupTick(sf::RectangleShape &tick, const double pixelStepSize) const;
   void setupNumbers(sf::Text &text) const;
+  void setupAxisLabels(sf::Text &text, int spacing) const;
   int calcTickCount() const;
   double calcPixelStepSize() const;
   void updateTickPosition(sf::RectangleShape &tick, double pixelStepSize) const;

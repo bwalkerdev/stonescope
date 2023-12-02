@@ -44,7 +44,7 @@ int main() {
   tsPlot.setLineThickness(3);
   tsPlot.setAxisColor(sf::Color::Black);
   tsPlot.setAxisStepSize(sf::Vector2f(1, 1));
-  tsPlot.setXAxisLabel("Frequency (GHz");
+  tsPlot.setXAxisLabel("Frequency (GHz)");
   tsPlot.setYAxisLabel("Magnitude (dB)");
 
   sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight),

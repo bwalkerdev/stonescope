@@ -24,6 +24,10 @@ public:
   void setYAxisLabel(std::string label);
   void setXAxisLabel(std::string label);
   void setFont(sf::Font font);
+  struct AxisLabelContainer {
+    std::string x;
+    std::string y;
+  };
 
 private:
   virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
@@ -38,7 +42,7 @@ private:
   sf::Color _axisColor;
   sf::Color _tickColor;
   sf::Vector2f _axisStepSize;
-  Axis::AxisLabelContainer _axisLabel;
+  AxisLabelContainer _axisLabel;
   sf::Font &_font;
   // std::vector<std::vector<TSLine>> _lines;
 };

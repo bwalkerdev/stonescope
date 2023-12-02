@@ -84,34 +84,37 @@ void Axis::setNumberPosition(sf::Text &text, const sf::Vector2f offset,
   }
 }
 
+void Axis::setupAxisLabels(sf::Text &text, int spacing) const {
+  text.setFont(_font);
+  text.setFillColor(_tickColor);
+  text.setCharacterSize(18);
+  text.setString(_axisLabel);
+  sf::FloatRect labelBox;
+
+  if (_type == AxisType::Y) {
+    labelBox = text.getLocalBounds();
+    text.setOrigin(labelBox.getSize().x / 2, labelBox.getSize().y);
+    text.setRotation(270);
+    text.setPosition(-spacing, _length / 2); // TODO: Make x set by user
+  } else if (_type == AxisType::X) {
+    labelBox = text.getLocalBounds();
+    text.setOrigin(labelBox.getSize().x / 2, labelBox.getSize().y);
+    text.setPosition(_length / 2,
+                     spacing + 10); // TODO: Make x set by user
+  }
+}
+
 void Axis::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   sf::RectangleShape axis;
   setupAxis(axis);
 
   sf::Text axisLabel;
-  // TODO: Encapsulate this into a function
-  axisLabel.setFont(_font);
-  axisLabel.setFillColor(_tickColor);
-  sf::FloatRect labelBox;
-
-  if (_type == AxisType::Y) {
-    axisLabel.setString(_axisLabel.y);
-    labelBox = axisLabel.getLocalBounds();
-    axisLabel.setOrigin(labelBox.getSize().x / 2, labelBox.getSize().y);
-    axisLabel.setRotation(90);
-    axisLabel.setPosition(-15, _length / 2); // TODO: Make x set by user
-  } else if (_type == AxisType::X) {
-    axisLabel.setString(_axisLabel.x);
-    labelBox = axisLabel.getLocalBounds();
-    axisLabel.setOrigin(labelBox.getSize().x / 2, 0);
-    axisLabel.setPosition(_length / 2,
-                          _length + 15); // TODO: Make x set by user
-  }
+  setupAxisLabels(axisLabel, 40);
 
   int count = calcTickCount();
   double pixelStepSize =
-      calcPixelStepSize(); // NOTE: Must be a double for calcs eventhough pixels
-                           // cannot be fractional
+      calcPixelStepSize(); // NOTE: Must be a double for calcs even-though
+                           // pixels cannot be fractional
 
   sf::RectangleShape tick;
   setupTick(tick, pixelStepSize);
@@ -127,6 +130,7 @@ void Axis::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     updateTickPosition(tick, pixelStepSize);
   }
   target.draw(axis, states);
+  target.draw(axisLabel, states);
 };
 
 void Axis::setLineThickness(double lineThickness) {
@@ -149,6 +153,4 @@ void Axis::setStepSize(double stepSize) { _stepSize = stepSize; }
 
 void Axis::setFont(const sf::Font &font) { _font = font; }
 
-void Axis::setXAxisLabel(std::string label) { _axisLabel.x = label; }
-
-void Axis::setYAxisLabel(std::string label) { _axisLabel.y = label; }
+void Axis::setLabel(const std::string label) { _axisLabel = label; }

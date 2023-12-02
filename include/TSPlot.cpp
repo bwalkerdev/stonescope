@@ -36,6 +36,7 @@ void TSPlot::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   yAxis.setMin(_file.getMinLHS());
   yAxis.setType(AxisType::Y);
   yAxis.setFont(_font);
+  yAxis.setLabel(_axisLabel.y);
   // yAxis.setOrigin(sf::Vector2f(_lineThickness, _plotSize.y));
   // yAxis.setPosition(_origin);
   //
@@ -51,6 +52,7 @@ void TSPlot::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   xAxis.setMin(_file.getMinFreq());
   xAxis.setType(AxisType::X);
   xAxis.setFont(_font);
+  xAxis.setLabel(_axisLabel.x);
 
   states.transform *= getTransform();
   target.draw(background, states);
