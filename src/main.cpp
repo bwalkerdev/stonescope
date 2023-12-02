@@ -1,16 +1,18 @@
 #include "../include/Plot.h"
+#include "../include/TSPlot.h"
 #include "../include/TouchstoneFile.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <iostream>
 
 int main() {
-  int windowWidth = 1080;
-  int windowHeight = 720;
+  int windowWidth = 1440;
+  int windowHeight = 1000;
   // Setup Resources
   sf::Font jetBrainsMono;
   if (!jetBrainsMono.loadFromFile(
@@ -30,7 +32,21 @@ int main() {
 
   // Setup Plot
   int margin = 50;
-  Plot plot(file, windowWidth, windowHeight, margin);
+  // Plot plot(file, windowWidth, windowHeight, margin);
+  //
+  //
+  TSPlot tsPlot(file, jetBrainsMono);
+
+  tsPlot.setWidth(windowWidth - 2 * margin);
+  tsPlot.setHeight(windowHeight - 2 * margin);
+  tsPlot.setBgColor(sf::Color::White);
+  tsPlot.setPosition(margin, margin);
+  tsPlot.setPadding(100);
+  tsPlot.setLineThickness(3);
+  tsPlot.setAxisColor(sf::Color::Black);
+  tsPlot.setAxisStepSize(sf::Vector2f(1, 1));
+  tsPlot.setXAxisLabel("Frequency (GHz");
+  tsPlot.setYAxisLabel("Magnitude (dB)");
 
   sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight),
                           "stonescope");
@@ -41,7 +57,8 @@ int main() {
     window.clear();
 
     window.draw(text);
-    plot.draw(window);
+    // plot.draw(window);
+    window.draw(tsPlot);
 
     window.display();
 
