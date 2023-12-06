@@ -39,8 +39,14 @@ void TouchstoneFile::_setDefaults() {
 void TouchstoneFile::open(const std::string FILEPATH) {
   // Find the position of 's' and 'p' in the filename, the number between them
   // gives us the number of ports
-  size_t posS = FILEPATH.rfind('S'); // FIXME: This only works if S is capital
-  size_t posP = FILEPATH.rfind('P'); // FIXME: This only works if p is capital
+  std::string lowerFilePath = FILEPATH;
+  for (size_t i = 0; i < lowerFilePath.length(); ++i) {
+    lowerFilePath.at(i) = tolower(lowerFilePath.at(i));
+  }
+  size_t posS =
+      lowerFilePath.rfind('s'); // FIXME: This only works if S is capital
+  size_t posP =
+      lowerFilePath.rfind('p'); // FIXME: This only works if p is capital
 
   if (posS != std::string::npos && posP != std::string::npos && posS < posP) {
     std::string portStr = FILEPATH.substr(posS + 1, posP - posS - 1);

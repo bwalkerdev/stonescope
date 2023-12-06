@@ -26,6 +26,7 @@ public:
   void setStepSize(double stepSize);
   void setFont(const sf::Font &font);
   void setLabel(const std::string label);
+  void setPadding(double padding);
   // TODO: Add function for getting size of axis
 
 private:
@@ -35,21 +36,25 @@ private:
   double _length;
   double _min;
   double _max;
+  double _padding;
   AxisType _type;
   sf::Color _axisColor;
   sf::Color _tickColor;
   sf::Font &_font;
   std::string _axisLabel;
-  void setupAxis(sf::RectangleShape &axis) const;
-  void setupTick(sf::RectangleShape &tick, const double pixelStepSize) const;
-  void setupNumbers(sf::Text &text) const;
-  void setupAxisLabels(sf::Text &text, int spacing) const;
-  int calcTickCount() const;
-  double calcPixelStepSize() const;
-  void updateTickPosition(sf::RectangleShape &tick, double pixelStepSize) const;
-  void setNumberPosition(sf::Text &text, const sf::Vector2f offset,
-                         const sf::RectangleShape tick,
-                         const int iteration) const;
+  enum class TextType { NUMBER, LABEL };
+  double _calcTextSize(TextType type) const;
+  void _setupAxis(sf::RectangleShape &axis) const;
+  void _setupTick(sf::RectangleShape &tick, const double pixelStepSize) const;
+  void _setupNumbers(sf::Text &text) const;
+  void _setupAxisLabels(sf::Text &text) const;
+  int _calcTickCount() const;
+  double _calcPixelStepSize() const;
+  void _updateTickPosition(sf::RectangleShape &tick,
+                           double pixelStepSize) const;
+  void _setNumberPosition(sf::Text &text, const sf::Vector2f offset,
+                          const sf::RectangleShape tick,
+                          const int iteration) const;
 };
 
 #endif // !AXIS_H

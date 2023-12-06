@@ -53,6 +53,7 @@ void TSPlot::generateGeometry() {
 
   Axis *yAxis = new Axis(_font);
   yAxis->setLength(_plotSize.y);
+  yAxis->setPadding(_padding);
   yAxis->setAxisColor(_axisColor);
   yAxis->setTickColor(_tickColor);
   yAxis->setLineThickness(_lineThickness);
@@ -70,6 +71,7 @@ void TSPlot::generateGeometry() {
   //
   Axis *xAxis = new Axis(_font);
   xAxis->setLength(_plotSize.x);
+  xAxis->setPadding(_padding);
   xAxis->setAxisColor(_axisColor);
   xAxis->setTickColor(_tickColor);
   xAxis->setLineThickness(_lineThickness);

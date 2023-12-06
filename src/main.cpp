@@ -10,12 +10,13 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <iostream>
 
-sf::Text *buildText(std::string inFile, sf::Font &font, int margin) {
+sf::Text *buildText(std::string inFile, sf::Font &font, int margin,
+                    int charSize) {
   sf::Text *text = new sf::Text();
   text->setFont(font);
   text->setString("Touchstone Plot: " +
                   inFile); // NOTE: L allows non-ascii characters
-  text->setCharacterSize(24);
+  text->setCharacterSize(charSize);
   text->setFillColor(sf::Color::White);
   text->setPosition(margin, margin / 4.0); //
   return text;
@@ -32,7 +33,7 @@ TSPlot *buildPlot(std::string inFile, sf::Font &font, int winWidth,
   tsPlot->setHeight(winHeight - 2 * margin);
   tsPlot->setBgColor(sf::Color::White);
   tsPlot->setPosition(margin, margin);
-  tsPlot->setPadding(100);
+  tsPlot->setPadding((winWidth + winHeight / 2.0) * 0.07);
   tsPlot->setLineThickness(3);
   tsPlot->setAxisColor(sf::Color::Black);
   tsPlot->setAxisStepSize(sf::Vector2f(1, 1));
@@ -51,19 +52,22 @@ int main(int argc, char *argv[]) {
   // Default Values
   std::string inFile;
   std::string outFile;
-  int windowWidth = 1920;
-  int windowHeight = 1080;
+  int windowWidth = 1080;
+  int windowHeight = 720;
   bool outputToFile;
 
   CLIParser cli(argc, argv);
   cli.setDescription(
-      "\nProgram Usage:\n"
-      "  <input path>     : File to plot\n"
-      "  -o <output path> : Output path for img. Omit flag for GUI\n"
-      "  -w <width>       : Window or img width\n"
-      "  -h <height>      : Window or img height\n"
+      "\n== Program Usage ==\n"
+      "  <input path>     : File to plot. You can provide multiple files in\n"
+      "                     image mode. GUI mode only supports one file\n"
+      "  -o <output path> : Output path for image. Omit flag to run in GUI\n"
+      "                     mode.\n"
+      "  -w <width>       : Window or image width. Default is 1080px\n"
+      "  -h <height>      : Window or image height. Default is 720px\n"
       "  --help           : Display this help message\n"
-      "\nExample: stonescope ./in.S2P -o ./out.png");
+      "\nExample: stonescope ./data/in.S2P -w 1920 -h 1080\n"
+      "Example: stonescope ./data/1.s2p ./2.s2p o ./output/data.png\n");
   // important things to grab from user at startup or by cli
   // 1. filepath
   // 2. window size
@@ -104,6 +108,7 @@ int main(int argc, char *argv[]) {
 
   if (files.empty()) {
     std::cout << "Error: No input files specified" << std::endl;
+    cli.printHelp();
     return 2;
   } else if (files.size() > 1 && !outputToFile) {
     std::cout << "Error: GUI only supports plotting one file at a time"
@@ -122,9 +127,12 @@ int main(int argc, char *argv[]) {
   for (auto &fileName : files) {
     std::cout << "Plotting: " << fileName << std::endl;
     TSPlot *pPlot =
-        buildPlot(fileName, jetBrainsMono, windowWidth, windowHeight, 50);
+        buildPlot(fileName, jetBrainsMono, windowWidth, windowHeight,
+                  (windowWidth + windowHeight / 2.0) * 0.03);
 
-    sf::Text *pText = buildText(fileName, jetBrainsMono, 50);
+    sf::Text *pText = buildText(fileName, jetBrainsMono,
+                                (windowWidth + windowHeight / 2.0) * 0.03,
+                                (windowWidth + windowHeight / 2.0) * 0.0175);
 
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight),
                             "stonescope");

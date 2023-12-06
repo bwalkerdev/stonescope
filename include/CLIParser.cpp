@@ -11,10 +11,12 @@ void CLIParser::_parse(int argc, char *argv[]) {
 
     if (arg[0] == '-') { // arg is a key
       std::string val = "";
-      if (argv[i+1][0]!= '-') {
-        val = argv[i+1];
-        i++;
-     }
+      if (i + 1 < argc) {
+        if (argv[i + 1][0] != '-') {
+          val = argv[i + 1];
+          i++;
+        }
+      }
       _args[arg] = val;
     } else {
       _fileNames.push_back(arg);
