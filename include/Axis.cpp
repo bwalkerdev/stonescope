@@ -64,7 +64,7 @@ void Axis::updateTickPosition(sf::RectangleShape &tick,
 
 void Axis::setupNumbers(sf::Text &text) const {
   text.setFont(_font);
-  text.setCharacterSize(10);
+  text.setCharacterSize(20);
   text.setFillColor(_tickColor);
 }
 
@@ -87,7 +87,7 @@ void Axis::setNumberPosition(sf::Text &text, const sf::Vector2f offset,
 void Axis::setupAxisLabels(sf::Text &text, int spacing) const {
   text.setFont(_font);
   text.setFillColor(_tickColor);
-  text.setCharacterSize(18);
+  text.setCharacterSize(35);
   text.setString(_axisLabel);
   sf::FloatRect labelBox;
 
@@ -109,7 +109,7 @@ void Axis::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   setupAxis(axis);
 
   sf::Text axisLabel;
-  setupAxisLabels(axisLabel, 40);
+  setupAxisLabels(axisLabel, 50);
 
   int count = calcTickCount();
   double pixelStepSize =

@@ -1,5 +1,6 @@
 #include "TouchstoneFile.h"
 #include "Options.h"
+#include <SFML/System/Vector2.hpp>
 #include <cctype>
 #include <cstddef>
 #include <fstream>
@@ -215,3 +216,19 @@ double TouchstoneFile::getMinLHS() const { return _minLHS; }
 double TouchstoneFile::getMaxRHS() const { return _maxRHS; }
 
 double TouchstoneFile::getMinRHS() const { return _minRHS; }
+
+unsigned long TouchstoneFile::getNumPoints() const {
+  return _originalData.size();
+}
+
+sf::Vector2f TouchstoneFile::at(int index, Side side, int param)
+    const { // FIXME: Add proper validation. This is bad
+  double retrievedParam;
+  double retrievedFrequency = _originalData.at(index)->frequency;
+  if (side == TouchstoneFile::Side::LHS) {
+    retrievedParam = _originalData.at(index)->lhs.at(param);
+  } else {
+    retrievedParam = _originalData.at(index)->rhs.at(param);
+  }
+  return sf::Vector2f(retrievedFrequency, retrievedParam);
+}

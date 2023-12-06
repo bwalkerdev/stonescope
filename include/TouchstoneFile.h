@@ -1,5 +1,6 @@
 #include "DataPoint.h"
 #include "Options.h"
+#include <SFML/System/Vector2.hpp>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -43,6 +44,9 @@ public:
   double getMinLHS() const;
   double getMaxRHS() const;
   double getMinRHS() const;
+  unsigned long getNumPoints() const;
+  enum class Side { LHS, RHS };
+  sf::Vector2f at(int index, Side side, int param) const;
 
 private:
   /**

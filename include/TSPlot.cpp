@@ -1,8 +1,10 @@
 #include "TSPlot.h"
 #include "Axis.h"
+#include "Line.h"
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/System/Vector2.hpp>
 
 TSPlot::TSPlot(TouchstoneFile &file, sf::Font &font)
     : _file(file), _font(font) {
@@ -48,10 +50,35 @@ void TSPlot::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   xAxis.setFont(_font);
   xAxis.setLabel(_axisLabel.x);
 
+  Line line;
+  line.setColor(sf::Color::Red);
+  for (unsigned long i = 0; i < _file.getNumPoints(); ++i) {
+    line.push_back(_file.at(i, TouchstoneFile::Side::LHS, 0));
+  }
+  line.generateGeometry();
+  sf::Vector2f scaleFactor = sf::Vector2f(_plotSize.x / line.getSize().x,
+                                          _plotSize.y / line.getSize().y);
+  line.setScale(scaleFactor);
+  line.setPosition(_origin);
+
+  Line secondParam;
+  secondParam.setColor(sf::Color::Blue);
+  for (unsigned long i = 0; i < _file.getNumPoints(); ++i) {
+    secondParam.push_back(_file.at(i, TouchstoneFile::Side::LHS, 1));
+  }
+  secondParam.generateGeometry();
+  sf::Vector2f scaleFactor2 =
+      sf::Vector2f(_plotSize.x / secondParam.getSize().x,
+                   _plotSize.y / secondParam.getSize().y);
+  secondParam.setScale(scaleFactor2);
+  secondParam.setPosition(_origin);
+
   states.transform *= getTransform();
   target.draw(background, states);
   target.draw(yAxis, states);
   target.draw(xAxis, states);
+  target.draw(line, states);
+  target.draw(secondParam, states);
 }
 
 void TSPlot::setWidth(double width) {
