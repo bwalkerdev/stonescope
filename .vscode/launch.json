@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/stonescope",
-            "args": ["-f", "./data/3.S2P"],
+            "args": ["./data/2.S2P", "./data/1.S2P"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

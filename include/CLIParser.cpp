@@ -5,14 +5,19 @@
 CLIParser::CLIParser(int argc, char *argv[]) { _parse(argc, argv); }
 
 void CLIParser::_parse(int argc, char *argv[]) {
+
   for (int i = 1; i < argc; i++) {
-    std::string key = argv[i];
-    if (key[0] == '-') {
-      if (i + 1 < argc) {
-        _args[key] = argv[i + 1];
-      } else {
-        _args[key] = "";
-      }
+    std::string arg = argv[i];
+
+    if (arg[0] == '-') { // arg is a key
+      std::string val = "";
+      if (argv[i+1][0]!= '-') {
+        val = argv[i+1];
+        i++;
+     }
+      _args[arg] = val;
+    } else {
+      _fileNames.push_back(arg);
     }
   }
 }
@@ -41,3 +46,5 @@ bool CLIParser::hasFlag(const std::string ARG) const {
   }
   return true;
 }
+
+std::list<std::string> &CLIParser::getFiles() { return _fileNames; }

@@ -48,6 +48,8 @@ public:
    */
   void setDescription(const std::string DESCRIPTION);
 
+  std::list<std::string> &getFiles();
+
 private:
   /**
    * @brief Parses the command line arguments.
