@@ -19,7 +19,6 @@ TouchstoneFile::~TouchstoneFile() {
   for (size_t i = 0; i < _originalData.size(); ++i) {
     delete _originalData.at(i);
   }
-  std::cout << "Called ~TouchstoneFile" << std::endl;
 }
 
 void TouchstoneFile::_setDefaults() {

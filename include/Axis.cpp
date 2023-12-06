@@ -64,7 +64,7 @@ void Axis::updateTickPosition(sf::RectangleShape &tick,
 
 void Axis::setupNumbers(sf::Text &text) const {
   text.setFont(_font);
-  text.setCharacterSize(20);
+  text.setCharacterSize(10);
   text.setFillColor(_tickColor);
 }
 
@@ -109,7 +109,7 @@ void Axis::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   setupAxis(axis);
 
   sf::Text axisLabel;
-  setupAxisLabels(axisLabel, 50);
+  setupAxisLabels(axisLabel, 40);
 
   int count = calcTickCount();
   double pixelStepSize =

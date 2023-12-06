@@ -1,10 +1,12 @@
 #include "TSPlot.h"
 #include "Axis.h"
 #include "Line.h"
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <cmath>
 
 TSPlot::TSPlot(TouchstoneFile &file, sf::Font &font)
     : _file(file), _font(font) {
@@ -16,69 +18,80 @@ TSPlot::TSPlot(TouchstoneFile &file, sf::Font &font)
   _bgColor = sf::Color::Black;
 }
 
-void TSPlot::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-  sf::RectangleShape background(_size);
-  background.setFillColor(_bgColor);
+TSPlot::~TSPlot() {
+  for (auto drawable : _plotComponents) {
+    delete drawable;
+  }
+  for (auto line : _lines) {
+    delete line;
+  }
+}
 
-  Axis yAxis(_font);
-  yAxis.setLength(_plotSize.y);
-  yAxis.setAxisColor(_axisColor);
-  yAxis.setTickColor(_tickColor);
-  yAxis.setLineThickness(_lineThickness);
-  yAxis.setOrigin(_lineThickness, _plotSize.y);
-  yAxis.setPosition(_origin);
-  yAxis.setStepSize(_axisStepSize.y);
-  yAxis.setMax(_file.getMaxLHS());
-  yAxis.setMin(_file.getMinLHS());
-  yAxis.setType(AxisType::Y);
-  yAxis.setFont(_font);
-  yAxis.setLabel(_axisLabel.y);
+sf::Vector2f TSPlot::_calcPerPixelFactor() {
+  float x = _plotSize.x / std::ceil(_file.getMaxFreq());
+  float y = _plotSize.y / std::ceil(_file.getMaxLHS());
+  return sf::Vector2f(x, y);
+}
+
+void TSPlot::addLine(int param, sf::Color color) {
+  Line *line = new Line();
+  line->setColor(color);
+
+  for (unsigned long i = 0; i < _file.getNumPoints(); ++i) {
+    line->push_back(_file.at(i, TouchstoneFile::Side::LHS, param));
+  }
+  line->generateGeometry();
+  line->setScale(_calcPerPixelFactor());
+  line->setPosition(_origin);
+  _lines.push_back(line);
+}
+
+void TSPlot::generateGeometry() {
+  sf::RectangleShape *background = new sf::RectangleShape(_size);
+  background->setFillColor(_bgColor);
+  _plotComponents.push_back(background);
+
+  Axis *yAxis = new Axis(_font);
+  yAxis->setLength(_plotSize.y);
+  yAxis->setAxisColor(_axisColor);
+  yAxis->setTickColor(_tickColor);
+  yAxis->setLineThickness(_lineThickness);
+  yAxis->setOrigin(_lineThickness, _plotSize.y);
+  yAxis->setPosition(_origin);
+  yAxis->setStepSize(_axisStepSize.y);
+  yAxis->setMax(_file.getMaxLHS());
+  yAxis->setMin(_file.getMinLHS());
+  yAxis->setType(AxisType::Y);
+  yAxis->setFont(_font);
+  yAxis->setLabel(_axisLabel.y);
+  _plotComponents.push_back(yAxis);
   // yAxis.setOrigin(sf::Vector2f(_lineThickness, _plotSize.y));
   // yAxis.setPosition(_origin);
   //
-  Axis xAxis(_font);
-  xAxis.setLength(_plotSize.x);
-  xAxis.setAxisColor(_axisColor);
-  xAxis.setTickColor(_tickColor);
-  xAxis.setLineThickness(_lineThickness);
-  xAxis.setOrigin(0, 0);
-  xAxis.setPosition(_origin);
-  xAxis.setStepSize(_axisStepSize.x);
-  xAxis.setMax(_file.getMaxFreq());
-  xAxis.setMin(_file.getMinFreq());
-  xAxis.setType(AxisType::X);
-  xAxis.setFont(_font);
-  xAxis.setLabel(_axisLabel.x);
+  Axis *xAxis = new Axis(_font);
+  xAxis->setLength(_plotSize.x);
+  xAxis->setAxisColor(_axisColor);
+  xAxis->setTickColor(_tickColor);
+  xAxis->setLineThickness(_lineThickness);
+  xAxis->setOrigin(0, 0);
+  xAxis->setPosition(_origin);
+  xAxis->setStepSize(_axisStepSize.x);
+  xAxis->setMax(_file.getMaxFreq());
+  xAxis->setMin(_file.getMinFreq());
+  xAxis->setType(AxisType::X);
+  xAxis->setFont(_font);
+  xAxis->setLabel(_axisLabel.x);
+  _plotComponents.push_back(xAxis);
+}
 
-  Line line;
-  line.setColor(sf::Color::Red);
-  for (unsigned long i = 0; i < _file.getNumPoints(); ++i) {
-    line.push_back(_file.at(i, TouchstoneFile::Side::LHS, 0));
-  }
-  line.generateGeometry();
-  sf::Vector2f scaleFactor = sf::Vector2f(_plotSize.x / line.getSize().x,
-                                          _plotSize.y / line.getSize().y);
-  line.setScale(scaleFactor);
-  line.setPosition(_origin);
-
-  Line secondParam;
-  secondParam.setColor(sf::Color::Blue);
-  for (unsigned long i = 0; i < _file.getNumPoints(); ++i) {
-    secondParam.push_back(_file.at(i, TouchstoneFile::Side::LHS, 1));
-  }
-  secondParam.generateGeometry();
-  sf::Vector2f scaleFactor2 =
-      sf::Vector2f(_plotSize.x / secondParam.getSize().x,
-                   _plotSize.y / secondParam.getSize().y);
-  secondParam.setScale(scaleFactor2);
-  secondParam.setPosition(_origin);
-
+void TSPlot::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   states.transform *= getTransform();
-  target.draw(background, states);
-  target.draw(yAxis, states);
-  target.draw(xAxis, states);
-  target.draw(line, states);
-  target.draw(secondParam, states);
+  for (auto drawable : _plotComponents) {
+    target.draw(*drawable, states);
+  }
+  for (auto line : _lines) {
+    target.draw(*line, states);
+  }
 }
 
 void TSPlot::setWidth(double width) {

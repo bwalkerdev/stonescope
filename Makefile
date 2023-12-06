@@ -1,10 +1,10 @@
 TARGET = stonescope 
-SRC_FILES = ./src/main.cpp ./include/TouchstoneFile.cpp ./include/TouchstoneFile.h ./include/Options.h ./include/DataPoint.h ./include/TSPlot.cpp ./include/TSPlot.h ./include/Axis.h ./include/Axis.cpp ./include/Line.h ./include/Line.cpp
+SRC_FILES = ./src/main.cpp ./include/TouchstoneFile.cpp ./include/TouchstoneFile.h ./include/Options.h ./include/DataPoint.h ./include/TSPlot.cpp ./include/TSPlot.h ./include/Axis.h ./include/Axis.cpp ./include/Line.h ./include/Line.cpp ./include/CLIParser.h ./include/CLIParser.cpp
 
 # NO EDITS NEEDED BELOW THIS LINE
 
 CXX = g++
-CXXFLAGS = -Wall -Wextra -Werror -pedantic-errors
+CXXFLAGS = -Wall -Wextra -pedantic-errors # -Werror 
 CXXFLAGS_DEBUG = -g
 CXXVERSION = -std=c++17
 
@@ -72,8 +72,9 @@ depend:
 .PHONY: all clean depend
 
 # DEPENDENCIES
-main.o: main.cpp ./include/TouchstoneFile.h 
+main.o: main.cpp ./include/TouchstoneFile.h ./include/CLIParser.h
 TouchstoneFile.o: ./include/TouchstoneFile.h ./include/DataPoint.h ./include/Options.h
 TSPlot.o: ./include/TSPlot.h ./include/Axis.h ./include/Line.h
 Axis.o: ./include/Axis.h
 Line.o: ./include/Line.h
+CLIParser.o: ./include/CLIParser.h
