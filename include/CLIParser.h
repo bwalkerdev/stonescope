@@ -36,6 +36,12 @@ public:
    */
   std::string getArg(const std::string ARG) const;
 
+  /**
+   * @brief Check if the parser has a flag
+   *
+   * @param ARG Flag to check for
+   * @return Turn if the flag is present
+   */
   bool hasFlag(const std::string ARG) const;
 
   /**
@@ -48,6 +54,9 @@ public:
    */
   void setDescription(const std::string DESCRIPTION);
 
+  /**
+   * @brief Get the list of files
+   */
   std::list<std::string> &getFiles();
 
 private:

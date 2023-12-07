@@ -10,6 +10,15 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <iostream>
 
+/**
+ * @brief Build a text object containing the file name
+ *
+ * @param inFile Filename to display
+ * @param font Font to be used
+ * @param margin  Plot margin. Used to calc text placement
+ * @param charSize Font size
+ * @return Text object
+ */
 sf::Text *buildText(std::string inFile, sf::Font &font, int margin,
                     int charSize) {
   sf::Text *text = new sf::Text();
@@ -22,32 +31,54 @@ sf::Text *buildText(std::string inFile, sf::Font &font, int margin,
   return text;
 }
 
+/**
+ * @brief Build a TSPlot object
+ *
+ * @param inFile  Filename to plot
+ * @param font  Font to be used
+ * @param winWidth Total width of window
+ * @param winHeight Total height of window
+ * @param margin  Margin around plot
+ * @return TSPlot object on success, nullptr on failure
+ */
 TSPlot *buildPlot(std::string inFile, sf::Font &font, int winWidth,
                   int winHeight, int margin) {
 
   TouchstoneFile *file = new TouchstoneFile();
-  file->open(inFile);
+  try {
+    file->open(inFile);
 
-  TSPlot *tsPlot = new TSPlot(*file, font);
-  tsPlot->setWidth(winWidth - 2 * margin);
-  tsPlot->setHeight(winHeight - 2 * margin);
-  tsPlot->setBgColor(sf::Color::White);
-  tsPlot->setPosition(margin, margin);
-  tsPlot->setPadding((winWidth + winHeight / 2.0) * 0.07);
-  tsPlot->setLineThickness(3);
-  tsPlot->setAxisColor(sf::Color::Black);
-  tsPlot->setAxisStepSize(sf::Vector2f(1, 1));
-  tsPlot->setXAxisLabel("Frequency (GHz)");
-  tsPlot->setYAxisLabel("Magnitude (dB)");
-  tsPlot->addLine(0, sf::Color::Red);
-  tsPlot->addLine(1, sf::Color::Blue);
-  tsPlot->addLine(2, sf::Color::Green);
-  tsPlot->addLine(3, sf::Color::Magenta);
-  tsPlot->generateGeometry();
-
-  return tsPlot;
+    TSPlot *tsPlot = new TSPlot(*file, font);
+    tsPlot->setWidth(winWidth - 2 * margin);
+    tsPlot->setHeight(winHeight - 2 * margin);
+    tsPlot->setBgColor(sf::Color::White);
+    tsPlot->setPosition(margin, margin);
+    tsPlot->setPadding((winWidth + winHeight / 2.0) * 0.07);
+    tsPlot->setLineThickness(3);
+    tsPlot->setAxisColor(sf::Color::Black);
+    tsPlot->setAxisStepSize(sf::Vector2f(1, 1));
+    tsPlot->setXAxisLabel("Frequency (GHz)");
+    tsPlot->setYAxisLabel("Magnitude (dB)");
+    tsPlot->addLine(0, sf::Color::Red);
+    tsPlot->addLine(1, sf::Color::Blue);
+    tsPlot->addLine(2, sf::Color::Green);
+    tsPlot->addLine(3, sf::Color::Magenta);
+    tsPlot->generateGeometry();
+    return tsPlot;
+  } catch (...) {
+    delete file;
+    std::cerr << "Error: Unable to open provided file" << std::endl;
+    return nullptr;
+  }
 }
 
+/**
+ * @brief Main entry point for program
+ *
+ * @param argc Count of command line arguments
+ * @param argv Command line arguments
+ * @return int 0 on success, non-zero on failure
+ */
 int main(int argc, char *argv[]) {
   // Default Values
   std::string inFile;
@@ -68,12 +99,6 @@ int main(int argc, char *argv[]) {
       "  --help           : Display this help message\n"
       "\nExample: stonescope ./data/in.S2P -w 1920 -h 1080\n"
       "Example: stonescope ./data/1.s2p ./2.s2p o ./output/data.png\n");
-  // important things to grab from user at startup or by cli
-  // 1. filepath
-  // 2. window size
-  // 3. plot type (s2p, s1p, s3p, s4p)
-  // 4. plot lhs or rhs
-  // 5. output to display or file
 
   if (argc == 1) {
     cli.printHelp();
@@ -130,6 +155,10 @@ int main(int argc, char *argv[]) {
         buildPlot(fileName, jetBrainsMono, windowWidth, windowHeight,
                   (windowWidth + windowHeight / 2.0) * 0.03);
 
+    if (pPlot == nullptr) {
+      return 4; // Invalid file
+    }
+
     sf::Text *pText = buildText(fileName, jetBrainsMono,
                                 (windowWidth + windowHeight / 2.0) * 0.03,
                                 (windowWidth + windowHeight / 2.0) * 0.0175);
@@ -144,10 +173,12 @@ int main(int argc, char *argv[]) {
       window.draw(*pText);
       window.draw(*pPlot);
       if (outputToFile) {
+        // Image logic
         sf::Texture texture;
         texture.create(windowWidth, windowHeight);
         texture.update(window);
         sf::Image image = texture.copyToImage();
+        // Add index to file name if multiple files are provided
         if (files.size() > 1) {
           std::string iterOutFile = outFile;
           unsigned long dotIDX = iterOutFile.find_last_of('.');
@@ -167,6 +198,8 @@ int main(int argc, char *argv[]) {
       }
     }
     ++fileIDX;
+
+    // Clean up resources
     delete pPlot;
     delete pText;
   }
