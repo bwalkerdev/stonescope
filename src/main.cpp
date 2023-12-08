@@ -1,3 +1,17 @@
+/* Final Project: Stonescope
+ *
+ * Authors: Bryce Walker
+ *
+ * Resources Used: SFML and standard library docs
+ *
+ * Description:
+ * This program reads in a user provided Touchstone File, parses it, and outputs
+ * it to either the screen or an image, depending on user choice. It has an easy
+ * to use CLI, and supports the output of multiple files in a batch export. See
+ * ./stonescope --help for program usage help
+ *
+ */
+
 #include "../include/CLIParser.h"
 #include "../include/TSPlot.h"
 #include "../include/TouchstoneFile.h"
@@ -88,6 +102,7 @@ int main(int argc, char *argv[]) {
   bool outputToFile;
 
   CLIParser cli(argc, argv);
+  // Define help menu
   cli.setDescription(
       "\n== Program Usage ==\n"
       "  <input path>     : File to plot. You can provide multiple files in\n"
@@ -100,6 +115,7 @@ int main(int argc, char *argv[]) {
       "\nExample: stonescope ./data/in.S2P -w 1920 -h 1080\n"
       "Example: stonescope ./data/1.s2p ./2.s2p o ./output/data.png\n");
 
+  // Check all of our flags
   if (argc == 1) {
     cli.printHelp();
     return 1;

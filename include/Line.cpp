@@ -1,3 +1,9 @@
+/**
+ * @file Line.cpp
+ * @brief Line class implementation
+ * @author Bryce Walker
+ */
+
 #include "Line.h"
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <SFML/System/Vector2.hpp>

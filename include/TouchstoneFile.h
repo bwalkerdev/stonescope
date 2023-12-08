@@ -1,3 +1,10 @@
+/**
+ * @file TouchstoneFile.h
+ * @brief TouchstoneFile class definition, used to read in and parse a
+ * Touchstone file.
+ * @author Bryce Walker
+ */
+
 #include "DataPoint.h"
 #include "Options.h"
 #include <SFML/System/Vector2.hpp>

@@ -1,3 +1,9 @@
+/**
+ * @file TSPlot.cpp
+ * @brief Implementation of the Touchstone file plot class
+ * @author Bryce Walker
+ */
+
 #include "TSPlot.h"
 #include "Axis.h"
 #include "Line.h"
@@ -66,9 +72,7 @@ void TSPlot::generateGeometry() {
   yAxis->setFont(_font);
   yAxis->setLabel(_axisLabel.y);
   _plotComponents.push_back(yAxis);
-  // yAxis.setOrigin(sf::Vector2f(_lineThickness, _plotSize.y));
-  // yAxis.setPosition(_origin);
-  //
+
   Axis *xAxis = new Axis(_font);
   xAxis->setLength(_plotSize.x);
   xAxis->setPadding(_padding);

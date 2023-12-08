@@ -1,3 +1,9 @@
+/**
+ * @file Axis.cpp
+ * @brief Implementation of the axis class
+ * @author Bryce Walker
+ */
+
 #include "Axis.h"
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -37,7 +43,7 @@ void Axis::_setupTick(sf::RectangleShape &tick,
     tick.setOrigin(sf::Vector2f(
         _lineThickness / 2,
         _lineThickness *
-            2)); // NOTE: Set origin to center of tick perpindicuar to axis
+            2)); // NOTE: Set origin to center of tick perpendicular to axis
   }
   if (_type == AxisType::Y) {
     tick.setPosition(_lineThickness, _length - pixelStepSize);

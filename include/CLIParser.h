@@ -1,3 +1,10 @@
+/**
+ * @file CLIParser.h
+ * @brief General purpose command line parser. Stores flags in a hashmap for
+ * easy access
+ * @author Bryce Walker
+ */
+
 #ifndef CLIPARSER_H
 #define CLIPARSER_H
 

@@ -1,3 +1,9 @@
+/**
+ * @file TSPlot.h
+ * @brief Definition of the Touchstone file plot class.
+ * @author Bryce Walker
+ */
+
 #ifndef TS_PLOT_H
 #define TS_PLOT_H
 

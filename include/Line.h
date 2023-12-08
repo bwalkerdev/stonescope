@@ -1,3 +1,10 @@
+/**
+ * @file Line.h
+ * @brief Line plot class definition, used to plot a Touchstone file in the
+ * TSPlot class
+ * @author Bryce Walker
+ */
+
 #ifndef LINE_H
 #define LINE_H
 

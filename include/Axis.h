@@ -1,3 +1,9 @@
+/**
+ * @file Axis.h
+ * @brief Definition of the axis class. Builds an axis for use in the TSPlot
+ * class.
+ * @author Bryce Walker
+ */
 
 #ifndef AXIS_H
 #define AXIS_H

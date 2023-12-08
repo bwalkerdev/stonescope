@@ -1,3 +1,9 @@
+/**
+ * @file CLIParser.cpp
+ * @brief Implementation of the command line parser class
+ * @author Bryce Walker
+ */
+
 #include "CLIParser.h"
 #include <iostream>
 #include <stdexcept>

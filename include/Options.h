@@ -1,3 +1,9 @@
+/**
+ * @file Options.h
+ * @brief Enumeration of options that a Touchstone file could potentially have
+ * @author Bryce Walker
+ */
+
 #ifndef OPTIONS_H
 #define OPTIONS_H
 

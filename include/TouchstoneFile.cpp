@@ -1,3 +1,9 @@
+/**
+ * @file TouchstoneFile.cpp
+ * @brief Implementation of the TouchstoneFile class
+ * @author Bryce Walker
+ */
+
 #include "TouchstoneFile.h"
 #include "Options.h"
 #include <SFML/System/Vector2.hpp>
@@ -227,6 +233,7 @@ unsigned long TouchstoneFile::getNumPoints() const {
 sf::Vector2f TouchstoneFile::at(int index, Side side, int param)
     const { // FIXME: Add proper validation. This is bad
   DataPoint *pPoint;
+  // FIXME: Not ideal to do this with a linked list, but it works for now
   std::list<DataPoint *>::const_iterator it = _originalData.begin();
   std::advance(it, index);
   double retrievedParam;
