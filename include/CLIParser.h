@@ -1,8 +1,3 @@
-/**
- * @file CLIParser.h
- * @brief This file contains the declaration of the CLIParser class.
- */
-
 #ifndef CLIPARSER_H
 #define CLIPARSER_H
 

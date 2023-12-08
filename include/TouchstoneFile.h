@@ -2,8 +2,8 @@
 #include "Options.h"
 #include <SFML/System/Vector2.hpp>
 #include <fstream>
+#include <list>
 #include <string>
-#include <vector>
 
 #ifndef TOUCHSTONE_FILE_H
 #define TOUCHSTONE_FILE_H
@@ -111,7 +111,7 @@ private:
   ParameterType _parseParamT(const std::string &TOKEN);
   ParameterFormat _parseParamFmt(const std::string &TOKEN);
   int _numPorts;
-  std::vector<DataPoint *> _originalData;
+  std::list<DataPoint *> _originalData;
   FrequencyType _freqT;
   ParameterType _paramT;
   ParameterFormat _paramFmt;

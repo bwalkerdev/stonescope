@@ -1,0 +1,34 @@
+# TITLE
+Bryce Walker
+Section D
+Stonescope
+
+# PROBLEM DESCRIPTION
+There is no CLI application to quickly generate image plots for a sequence of Touchstone files in an easy and intuitive manner. All current Touchstone viewers are big and bulky or web-based without a batch export option. Sometimes an electrical engineer needs to generate simple plots rapidly to show the client the characteristics of the device. This application aims to solve that problem.
+
+# Program Documentation
+Stonescope is a CLI tool, first and foremost. It is designed to be easy and simple to operate. Running the `./stonescope.exe` executable will display an intuitive help menu. This menu can also be accessed with the `./stonescope --help` flag. If one were to provide a single filename to Stonescope `./stonescope.exe ./data/1.s2p` it would plot the data and display this plot in a 1080x720 window. The size of this window can be changed with the `-w` and `-h` flags for width and height, respectively. For example, `./stonescope.exe ./data/1.s2p -w 2560 -h 2560` will plot the Touchstone file in a window of size 2560x2560. GUI mode, however, can only support displaying one plot at a time. For batch functionality, the `-o` flag must be used. Stonescope supports exporting multiple plots as images and will automatically increment the filename. For example, `./stonescope.exe ./data/1.s2p ./data/2.s2p -o ./out/output.png` will generate `./out/output-0.png` and `./out/output-1.png`. Different image file extensions are supported; however, PNG is the most tested. Sample Touchstone files are provided in the `./data/` folder for the grader's convenience.
+
+Stonescope's parsing and graphing libraries are all custom-built. The parsing library can easily be separated from this project and used in other programs (this was originally the plan), but the graphing library is specifically designed to plot Touchstone files. With some work, it could be generalized to plot any data. The CLI parser class is general and can be used with any other application. Both the image output and GUI are built with SFML, so a prospective developer must have SFML available. Everything is documented in the Doxygen standard and should be easily extensible in the future. The main file is in the `./src/` folder, and all the custom classes are in the `./include/` folder.
+
+Here is a list of features that could not be included:
+1. Multiple ports
+2. Multiple plots in one window
+3. Automatic selection of frequencies and parameters based on user input
+4. An interactive GUI
+5. A way to save the plot as an image from the GUI
+6. Conversion between the different touchstone formats
+
+All of these features could have been implemented if I had more time to work on them. A lot of care was put into the groundwork of the parser to make implementing these features easy, and I believe it would be relatively straightforward to turn this application into a truly useful piece of software. For example, the automatic selection of frequencies could be implemented with a switch over an already defined enum. All of these features, while important, were not necessary for the MVP. A lot has changed since the initial proposal. I wanted to do everything that I did with the CLI tool but add an interactive GUI written in Rust. The parser libraries are in a state in which I could potentially compile them to a dynamic library and include them in the rust GUI code, but like many other features, I just did not have time.
+
+# CLASS DESCRIPTION
+To complete this project, I had to build many classes. The TouchstoneFile class encapsulates all the functionality necessary for a Touchstone parser. It reads the file in, stores each data point in a linked list of Point structs, finds the min and max of each measurement, and parses the option line into internal fields containing enums for easy switch logic later on. The TouchstoneFile class provides a stable interface for use with other programs, the graphing library, etc., with a multitude of getters and setters. Another class I had to build was the TSPlot class. It extends sf::Drawable and sf::Transformable, so it can easily be displayed on the screen by the end user. It contains a TouchstoneFile and encapsulates everything that is not necessary or important to the user when graphing the function (such as drawing and setting up the axis). Classes helped me separate my responsibilities. For example, the Axis class only had to worry about drawing the axis. The Line class only had to worry about drawing the line plot. The TSPlot class only had to worry about drawing the different components of the plot, and the TouchstoneFile class only had to worry about parsing a Touchstone file.
+
+# LIST DATA STRUCTURE
+Stonescope has many lists in use, but generally, when choosing a list, I choose the `std::list` or doubly linked list. This is because Touchstone files can have many data points, and consistently finding a contiguous chunk of memory that can fit all the data points may be problematic. Due to the nature of this being a graphing application, it tends to access these data points sequentially, so I saw only drawbacks associated with the array or vector in the context of this application.
+
+# FILE IO
+File IO is implemented in both the reading of a Touchstone file and the output of the generated graph. It was entirely necessary to implement this for the MVP because Touchstone files are so big that entering them into the CLI would take an eternity. In addition, the whole point of the application was to simplify the viewing of multiple touchstone files, so it was again necessary to implement the output in the form of an image.
+
+# REFLECTIONS
+I learned quite a bit on this project and really gained a great appreciation for those who contribute to the libraries that we take for granted. Building a plotting library from scratch was not nearly as easy as I had initially thought, and throughout the entire process, all I wanted to do was include a premade one so that I could work on functionality instead of the lower-level implementation. If I could do it again, I would probably have gotten approval to use a C++ library, so I could actually focus on what I wanted to do, learn about FFIs between programming languages, and build useful features for the end user. I also wish I would have started earlier and spent more time on the project, but I do believe that the past may be colored with rose-tinted glasses. I had very little time between the intensive workload of this class and my 15 other credit hours to work on this project, but I still believe I built something pretty great with the time I did have. Overall, I am proud of my work and will continue developing it further, hopefully adding all the necessary features to truly make it successful.

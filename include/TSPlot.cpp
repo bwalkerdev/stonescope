@@ -62,7 +62,7 @@ void TSPlot::generateGeometry() {
   yAxis->setStepSize(_axisStepSize.y);
   yAxis->setMax(_file.getMaxLHS());
   yAxis->setMin(_file.getMinLHS());
-  yAxis->setType(AxisType::Y);
+  yAxis->setType(Axis::AxisType::Y);
   yAxis->setFont(_font);
   yAxis->setLabel(_axisLabel.y);
   _plotComponents.push_back(yAxis);
@@ -80,7 +80,7 @@ void TSPlot::generateGeometry() {
   xAxis->setStepSize(_axisStepSize.x);
   xAxis->setMax(_file.getMaxFreq());
   xAxis->setMin(_file.getMinFreq());
-  xAxis->setType(AxisType::X);
+  xAxis->setType(Axis::AxisType::X);
   xAxis->setFont(_font);
   xAxis->setLabel(_axisLabel.x);
   _plotComponents.push_back(xAxis);

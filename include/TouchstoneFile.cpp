@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <limits>
 #include <sstream>
 #include <stdexcept>
@@ -16,8 +17,8 @@ TouchstoneFile::TouchstoneFile(const std::string FILEPATH) { open(FILEPATH); }
 
 TouchstoneFile::~TouchstoneFile() {
   // TODO: Clean up other pointers from additional datasets.
-  for (size_t i = 0; i < _originalData.size(); ++i) {
-    delete _originalData.at(i);
+  for (DataPoint *data : _originalData) {
+    delete data;
   }
 }
 
@@ -43,11 +44,8 @@ void TouchstoneFile::open(const std::string FILEPATH) {
   for (size_t i = 0; i < lowerFilePath.length(); ++i) {
     lowerFilePath.at(i) = tolower(lowerFilePath.at(i));
   }
-  size_t posS =
-      lowerFilePath.rfind('s'); // FIXME: This only works if S is capital
-  size_t posP =
-      lowerFilePath.rfind('p'); // FIXME: This only works if p is capital
-
+  size_t posS = lowerFilePath.rfind('s');
+  size_t posP = lowerFilePath.rfind('p');
   if (posS != std::string::npos && posP != std::string::npos && posS < posP) {
     std::string portStr = FILEPATH.substr(posS + 1, posP - posS - 1);
 
@@ -228,12 +226,24 @@ unsigned long TouchstoneFile::getNumPoints() const {
 
 sf::Vector2f TouchstoneFile::at(int index, Side side, int param)
     const { // FIXME: Add proper validation. This is bad
+  DataPoint *pPoint;
+  std::list<DataPoint *>::const_iterator it = _originalData.begin();
+  std::advance(it, index);
   double retrievedParam;
-  double retrievedFrequency = _originalData.at(index)->frequency;
-  if (side == TouchstoneFile::Side::LHS) {
-    retrievedParam = _originalData.at(index)->lhs.at(param);
+  double retrievedFrequency;
+
+  if (it != _originalData.end()) {
+    pPoint = *it;
   } else {
-    retrievedParam = _originalData.at(index)->rhs.at(param);
+    throw std::out_of_range("Index out of range");
+  }
+
+  retrievedFrequency = pPoint->frequency;
+
+  if (side == TouchstoneFile::Side::LHS) {
+    retrievedParam = pPoint->lhs.at(param);
+  } else {
+    retrievedParam = pPoint->rhs.at(param);
   }
   return sf::Vector2f(retrievedFrequency, retrievedParam);
 }
