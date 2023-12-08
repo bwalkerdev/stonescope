@@ -151,7 +151,7 @@ void Axis::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   }
   target.draw(axis, states);
   target.draw(axisLabel, states);
-};
+}
 
 void Axis::setLineThickness(double lineThickness) {
   _lineThickness = lineThickness;
