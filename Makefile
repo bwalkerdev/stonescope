@@ -1,10 +1,10 @@
 TARGET = stonescope 
-SRC_FILES = ./src/main.cpp ./include/TouchstoneFile.cpp ./include/TouchstoneFile.h ./include/Options.h ./include/DataPoint.h ./include/Plot.h ./include/Plot.cpp ./include/TSPlot.cpp ./include/TSPlot.h ./include/Axis.h ./include/Axis.cpp
+SRC_FILES = ./src/main.cpp ./include/TouchstoneFile.cpp ./include/TSPlot.cpp ./include/Axis.cpp ./include/Line.cpp ./include/CLIParser.cpp
 
 # NO EDITS NEEDED BELOW THIS LINE
 
 CXX = g++
-CXXFLAGS = -Wall -Wextra -Werror -pedantic-errors
+CXXFLAGS = -Wall -Wextra -pedantic-errors # -Werror 
 CXXFLAGS_DEBUG = -g
 CXXVERSION = -std=c++17
 
@@ -58,7 +58,7 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(ARCH) -o $@ $^ $(RPATH) -L$(LIB_PATH) $(LIBS)
 
 .cpp.o:
-	$(CXX) $(CXXFLAGS) $(CXXFLAGS_DEBUG) $(ARCH) $(CXXVERSION) -o $@ -c $< -I$(INC_PATH) # TODO: Remove debug flags
+	$(CXX) $(CXXFLAGS) $(ARCH) $(CXXVERSION) -o $@ -c $< -I$(INC_PATH) 
 
 clean:
 	$(DEL) $(TARGET) $(OBJECTS)
@@ -72,8 +72,9 @@ depend:
 .PHONY: all clean depend
 
 # DEPENDENCIES
-main.o: main.cpp ./include/TouchstoneFile.h # ./include/Plot.h
-TouchstoneFile.o: ./include/TouchstoneFile.h ./include/DataPoint.h ./include/Options.h
-Plot.o: ./include/Plot.h ./include/TouchstoneFile.h
-TSPlot.o: ./include/TSPlot.h ./include/Axis.h
-Axis.o: ./include/Axis.h
+main.o: main.cpp ./include/TouchstoneFile.h ./include/CLIParser.h
+TouchstoneFile.o: ./include/TouchstoneFile.cpp ./include/TouchstoneFile.h ./include/DataPoint.h ./include/Options.h
+TSPlot.o: /.include/TSPlot.cpp ./include/TSPlot.h ./include/Axis.h ./include/Line.h
+Axis.o: ./include/Axis.cpp ./include/Axis.h
+Line.o: ./include/Line.cpp  ./include/Line.h
+CLIParser.o: ./include/CLIParser.cpp ./include/CLIParser.h
