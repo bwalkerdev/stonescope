@@ -58,7 +58,7 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(ARCH) -o $@ $^ $(RPATH) -L$(LIB_PATH) $(LIBS)
 
 .cpp.o:
-	$(CXX) $(CXXFLAGS) $(ARCH) $(CXXVERSION) -o $@ -c $< -I$(INC_PATH) 
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_DEBUG) $(ARCH) $(CXXVERSION) -o $@ -c $< -I$(INC_PATH) 
 
 clean:
 	$(DEL) $(TARGET) $(OBJECTS)

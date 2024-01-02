@@ -37,8 +37,7 @@ sf::Text *buildText(std::string inFile, sf::Font &font, int margin,
                     int charSize) {
   sf::Text *text = new sf::Text();
   text->setFont(font);
-  text->setString("Touchstone Plot: " +
-                  inFile); // NOTE: L allows non-ascii characters
+  text->setString("TS Plot: " + inFile); // NOTE: L allows non-ascii characters
   text->setCharacterSize(charSize);
   text->setFillColor(sf::Color::White);
   text->setPosition(margin, margin / 4.0); //
